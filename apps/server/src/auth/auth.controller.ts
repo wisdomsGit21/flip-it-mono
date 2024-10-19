@@ -5,6 +5,7 @@ import {
   UseGuards,
   Get,
   Body,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -37,5 +38,12 @@ export class AuthController {
   @Get('google/callback')
   googleAuthRedirect(@Request() req) {
     return this.authService.googleLogin(req);
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  getProfile(@Req() req) {
+    console.log(req.user);
+    return req.user;
   }
 }

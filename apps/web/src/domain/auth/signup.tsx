@@ -16,10 +16,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { GoogleIcon } from "@/components/icons/google-icon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "@/app/services/authApi";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const signupSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
@@ -27,18 +29,27 @@ const signupSchema = z.object({
 type SignupValues = z.infer<typeof signupSchema>;
 
 const Signup: React.FC = () => {
+  const [register, { isLoading }] = useRegisterMutation();
+  const navigate = useNavigate();
+
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: SignupValues) => {
+  const onSubmit = async (values: SignupValues) => {
     console.log(values);
-    // Handle signup logic here
+    try {
+      const result = await register(values).unwrap();
+      console.log(result);
+      toast.success("Signup Successful");
+      navigate("/auth/signin");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -72,19 +83,6 @@ const Signup: React.FC = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-6"
               >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="email"
@@ -122,8 +120,12 @@ const Signup: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Sign up
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    " Sign up "
+                  )}
                 </Button>
               </form>
             </Form>

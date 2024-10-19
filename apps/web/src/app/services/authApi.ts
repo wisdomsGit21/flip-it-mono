@@ -24,7 +24,7 @@ export const authApi = api.injectEndpoints({
       }),
     }),
     getMe: build.query<User, void>({
-      query: () => "user",
+      query: () => "auth/profile",
     }),
   }),
 });

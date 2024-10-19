@@ -25,6 +25,10 @@ import { FlipbooksModule } from './flipbooks/flipbooks.module';
         database: config.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: config.get('NODE_ENV') !== 'production',
+        ssl: {
+          rejectUnauthorized: true,
+          ca: config.get<string>('DB_CA'),
+        },
       }),
       inject: [ConfigService],
     }),
