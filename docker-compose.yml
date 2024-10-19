@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: flip-it-mono-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: flip-it-db
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data_flip-it-mono:/var/lib/postgresql/data
+
+  minio:
+    image: quay.io/minio/minio
+    restart: always
+    container_name: flip-it-mono-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin # Replace with your desired username
+      MINIO_ROOT_PASSWORD: minioadmin # Replace with your desired password
+    command: server /data --console-address ":9001"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - minio_data_flip-it-mono:/data
+    networks:
+      - flip-it-network
+
+volumes:
+  db_data_flip-it-mono:
+  minio_data_flip-it-mono:
+
+networks:
+  flip-it-network:

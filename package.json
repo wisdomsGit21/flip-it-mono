@@ -1,0 +1,27 @@
+{
+  "name": "flip-it-mono",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "build:server": "turbo run build --filter=server",
+    "dev:server": "turbo run dev --filter=server",
+    "lint:server": "turbo run lint --filter=server",
+    "format:server": "prettier --write \"**/*.{ts,tsx,md}\" --config \"./packages/server/.prettierrc.js\"",
+    "build:web": "turbo run build --filter=web",
+    "dev:web": "turbo run dev --filter=web",
+    "lint:web": "turbo run lint --filter=web",
+    "format:web": "prettier --write \"**/*.{ts,tsx,md}\" --config \"./packages/web/.prettierrc.js\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^2.1.2",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@8.15.6",
+  "engines": {
+    "node": ">=18"
+  }
+}
